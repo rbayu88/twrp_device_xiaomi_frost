@@ -1,0 +1,46 @@
+name: Build TWRP POCO C40
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    steps:
+    - name: Cleanup Space
+      run: |
+        sudo rm -rf /usr/share/dotnet /etc/mysql /var/lib/mysql
+        sudo apt clean
+
+    - name: Install Build Tools
+      run: |
+        sudo apt update
+        sudo apt install -y bc build-essential libncurses5-dev libssl-dev flex bison gperf rsync git curl m4 python2 python3
+
+    - name: Sync TWRP Source
+      run: |
+        mkdir ~/twrp && cd ~/twrp
+        git config --global user.email "armaniyahsmpit@gmail.com"
+        git config --global user.name "rbayu88"
+        curl https://storage.googleapis.com > repo
+        chmod a+x repo
+        ./repo init --depth=1 -u https://github.com -b twrp-12.1
+        ./repo sync -j$(nproc) --no-clone-bundle --no-tags
+
+    - name: Clone Device Tree
+      uses: actions/checkout@v3
+      with:
+        path: ~/twrp/device/xiaomi/frost
+
+    - name: Build Recovery
+      run: |
+        cd ~/twrp
+        source build/envsetup.sh
+        export ALLOW_MISSING_DEPENDENCIES=true
+        lunch twrp_frost-eng
+        mka recoveryimage -j$(nproc)
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: TWRP-POCO-C40-frost
+        path: ~/twrp/out/target/product/frost/recovery.img
