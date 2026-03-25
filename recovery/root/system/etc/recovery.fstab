@@ -1,0 +1,25 @@
+# mount point       fstype      device                                                                         flags
+/system                ext4    system                                                     display="System";logical;slotselect
+/vendor                ext4    vendor                                                     display="Vendor";logical;slotselect
+/product               ext4    product                                                    display="Product";logical;slotselect
+/system_ext           ext4    system_ext                                                 display="System EXT";logical;slotselect
+
+/metadata              ext4    /dev/block/by-name/metadata                                display="Metadata"
+/data                  f2fs    /dev/block/by-name/userdata                                flags=fileencryption=aes-256-xts:aes-256-cts:v2+inlinecrypt_optimized,keydirectory=/metadata/vold/metadata_encryption
+/boot                  emmc    /dev/block/by-name/boot                                    display="Boot";backup=1;flashimg=1;slotselect
+/vendor_boot           emmc    /dev/block/by-name/vendor_boot                             display="Vendor Boot";backup=1;flashimg=1;slotselect
+/dtbo                  emmc    /dev/block/by-name/dtbo                                    display="DTBO";backup=1;flashimg=1;slotselect
+/vbmeta                emmc    /dev/block/by-name/vbmeta                                  display="VBMeta";backup=1;flashimg=1;slotselect
+/vbmeta_system         emmc    /dev/block/by-name/vbmeta_system                           display="VBMeta System";backup=1;flashimg=1;slotselect
+/vbmeta_vendor         emmc    /dev/block/by-name/vbmeta_vendor                           display="VBMeta Vendor";backup=1;flashimg=1;slotselect
+
+/cache                 ext4    /dev/block/by-name/cache                                   display="Cache"
+/persist               ext4    /dev/block/by-name/persist                                 display="Persist";backup=1
+/cust                  ext4    /dev/block/by-name/cust                                    display="Cust";backup=1
+
+/misc                  emmc    /dev/block/by-name/misc                                    display="Misc";backup=1;flashimg=1
+/persistent            emmc    /dev/block/by-name/frp                                     display="Persistent";backup=1
+
+# External storage
+/external_sd           vfat    /dev/block/mmcblk0p1            /dev/block/mmcblk0            display="MicroSD Card";storage;wipeui;removable
+/usb_otg               vfat    /dev/block/sdg1                 /dev/block/sdg                display="USB-OTG";storage;wipeui;removable

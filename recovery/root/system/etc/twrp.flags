@@ -1,0 +1,30 @@
+# Logical partitions
+/system_image          emmc    system                                                     flags=backup=1;flashimg=1;display="System Image";slotselect
+/vendor_image          emmc    vendor                                                     flags=backup=1;flashimg=1;display="Vendor Image";slotselect
+/product_image         emmc    product                                                    flags=backup=1;flashimg=1;display="Product Image";slotselect
+/system_ext_image      emmc    system_ext                                                 flags=backup=1;flashimg=1;display="System_EXT Image";slotselect
+
+# Dynamic Partition Group
+/super_image           emmc    /dev/block/by-name/super                                   flags=backup=1;flashimg=1;display="Super Image"
+
+# Standard Partitions
+/metadata              ext4    /dev/block/by-name/metadata                                flags=display="Metadata";backup=1
+/data                  f2fs    /dev/block/by-name/userdata                                flags=display="Data";backup=1;wipeui
+/cache                 ext4    /dev/block/by-name/cache                                   flags=display="Cache";backup=1;wipeui
+/persist               ext4    /dev/block/by-name/persist                                 flags=display="Persist";backup=1;mounttodecrypt
+
+# Boot & Recovery
+/boot                  emmc    /dev/block/by-name/boot                                    flags=display="Boot";backup=1;flashimg=1;slotselect
+/vendor_boot           emmc    /dev/block/by-name/vendor_boot                             flags=display="Vendor Boot";backup=1;flashimg=1;slotselect
+/dtbo                  emmc    /dev/block/by-name/dtbo                                    flags=display="DTBO";backup=1;flashimg=1;slotselect
+
+# Modem & EFS (Penting untuk sinyal)
+/modem                 emmc    /dev/block/by-name/modem                                   flags=display="Modem/Radio";backup=1;slotselect
+/efs1                  emmc    /dev/block/by-name/modemst1                                flags=display="EFS (NV Data)";backup=1
+/efs2                  emmc    /dev/block/by-name/modemst2                                flags=display="EFS (NV Data)";backup=1;subpartitionof=/efs1
+/fsg                   emmc    /dev/block/by-name/fsg                                     flags=display="FSG";backup=1
+/fsc                   emmc    /dev/block/by-name/fsc                                     flags=display="FSC";backup=1
+
+# Removable storage
+/external_sd           vfat    /dev/block/mmcblk0p1            /dev/block/mmcblk0            flags=display="MicroSD Card";storage;wipeui;removable
+/usb_otg               vfat    /dev/block/sdg1                 /dev/block/sdg                flags=display="USB-OTG";storage;wipeui;removable
